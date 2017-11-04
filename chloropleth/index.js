@@ -17,22 +17,52 @@ var albersProjection = d3.geoAlbersUsa()  //tell it which projection to use
 path = d3.geoPath()
     .projection(albersProjection);        //tell it to use the projection that we just made to convert lat/long to pixels
 
+var stateLookup = d3.map();
 
-//import the data from the .csv file
-d3.json('./cb_2016_us_state_20m.json', function(dataIn){
+var colorScale = d3.scaleLinear().range(['lightyellow','darkorange']);
 
-    svg.selectAll("path")               //make empty selection
-        .data(dataIn.features)          //bind to the features array in the map data
-        .enter()
-        .append("path")                 //add the paths to the DOM
-        .attr("d", path)                //actually draw them
-        .attr("class", "feature")
-        .attr('fill','gainsboro')
-        .attr('stroke','white')
-        .attr('stroke-width',.2);
+svg.append('text')
+    .attr('x',100)
+    .attr('y',100)
+    .attr('class','textbox')
+    .text('');
+
+queue()
+    .defer(d3.json, "./cb_2016_us_state_20m.json")
+    .defer(d3.csv, "./statePop.csv")
+    .await(function(err, mapData, populationData){
 
 
-  });
+        populationData.forEach(function(d){
+            stateLookup.set(d.name, d.population);
+        });
+
+
+        colorScale.domain([0, d3.max(populationData.map(function(d){return +d.population}))]);
+
+        svg.selectAll("path")               //make empty selection
+            .data(mapData.features)          //bind to the features array in the map data
+            .enter()
+            .append("path")                 //add the paths to the DOM
+            .attr("d", path)                //actually draw them
+            .attr("class", "feature")
+            .attr('fill',function(d){
+                return colorScale(stateLookup.get(d.properties.NAME));
+            })
+            .attr('stroke','white')
+            .attr('stroke-width',.2)
+            .on('mouseover', function (d) {
+                /*
+                svg.append('text')
+                    .attr('x',100)
+                    .attr('y',100)
+                    .text(d.properties.NAME);
+                    */
+                d3.select('.textbox')
+                    .text(d.properties.NAME);
+            });
+
+    });
 
 
 
