@@ -27,7 +27,7 @@ var cityLookup = d3.map();
 
 var colorScale = d3.scaleLinear().range(['white','blue']);
 
-var scaleX = d3.scaleBand().rangeRound([0, width-2*marginLeft]).padding(0.1);
+var scaleX = d3.scaleBand().rangeRound([0, width-2*marginLeft]).padding(0.2);
 var scaleY = d3.scaleLinear().range([height-2*marginTop, 0]);
 
 /*
@@ -100,12 +100,12 @@ d3.csv('./subway.csv', function(dataIn) {
 
     var loadData = nestedData.filter(function(d){return d.key == 'total'})[0].values;
 
-    svg.append("g")
+    svg2.append("g")
         .attr('class','xaxis')
         .attr('transform','translate(0,'+ (height-2*marginTop) +')')
         .call(d3.axisBottom(scaleX));
 
-    svg.append("g")
+    svg2.append("g")
         .attr('class', 'yaxis')
         .call(d3.axisLeft(scaleY));
 
@@ -127,7 +127,7 @@ function drawPoints(pointData){
         .call(d3.axisLeft(scaleY));
 
 
-    var rects = svg.selectAll('.bars')
+    var rects = svg2.selectAll('.bars')
         .data(pointData, function(d){return d.things;});
 
     console.log(pointData);
