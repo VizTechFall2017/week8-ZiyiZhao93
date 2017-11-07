@@ -1,4 +1,6 @@
 .svgBox{
-    width: 100vw;
-    height: 100vw;
+    float: left;
+}
+.svgBox2{
+    float: left;
 }
