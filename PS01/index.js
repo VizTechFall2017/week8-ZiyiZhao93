@@ -25,13 +25,12 @@ path = d3.geoPath()
 
 var cityLookup = d3.map();
 
-var colorScale = d3.scaleLinear().range(['white','blue']);
+var colorScale = d3.scaleLinear().range(['orange','orange']);
 
 var scaleX = d3.scaleBand().rangeRound([0, width-2*marginLeft]).padding(0.2);
 var scaleY = d3.scaleLinear().range([height-2*marginTop, 0]);
 
-/*
-subway line
+
 queue()
     .defer(d3.json, "./subway.json")
     .defer(d3.csv, "./subway.csv")
@@ -53,9 +52,9 @@ queue()
             .attr('stroke-width', .2);
 
     });
-*/
 
 
+/*
 queue()
     .defer(d3.json, "./boston1.json")
     .defer(d3.csv, "./subway.csv")
@@ -81,7 +80,7 @@ queue()
             .attr('stroke','white')
             .attr('stroke-width',.2)
             .on('mouseover',function (d) {
-                d3.select(this).attr('fill','pink');
+                d3.select(this).attr('fill','yellow');
             })
             .on('mouseout', function (d) {
                 d3.select(this).attr('fill', function (d) {
@@ -90,7 +89,7 @@ queue()
         })
 
     });
-
+*/
 
 d3.csv('./subway.csv', function(dataIn) {
 
